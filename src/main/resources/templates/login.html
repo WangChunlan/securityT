@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登录界面</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/sign-in.css">
+</head>
+<body>
+<p class="tip">Click on button in image container</p>
+<div class="cont">
+<!--<form  action="/login/loginForm" method="post">-->
+<form  th:action="@{/login/loginForm}" method="post">
+
+
+    <div class="form sign-in">
+        <h2>欢迎回来,</h2>
+        <label>
+            <span>用户名：</span>
+            <input type="text" name="username" />
+        </label>
+        <label>
+            <span>密码：</span>
+            <input type="password" name="password" />
+        </label>
+        <label>
+            <span>验证码：</span>
+            <input type="text" name="imageCode" />
+            <img src="/code/image" />
+        </label>
+        <label>
+            <span>记住我：</span>
+            <input type="checkbox" name="remember-me" value="true" />
+        </label>
+        <p class="forgot-pass">忘记密码?</p>
+        <input type="submit" class="submit input_button"  value="登录">
+
+        <button type="button" class="fb-btn">链接到 <span>facebook</span></button>
+    </div>
+</form>
+    <div class="sub-cont">
+        <div class="img">
+            <div class="img__text m--up">
+                <h2>新来的?</h2>
+                <p>注册将会发现新的机遇!</p>
+            </div>
+            <div class="img__text m--in">
+                <h2>我们中的一员?</h2>
+                <p>如果您已有帐户，请登录。我们很想念您!</p>
+            </div>
+            <div class="img__btn">
+                <span class="m--up">注册</span>
+                <span class="m--in">登录</span>
+            </div>
+        </div>
+        <div class="form sign-up">
+            <h2>时间感觉像家一样,</h2>
+            <label>
+                <span>用户名</span>
+                <input type="text" />
+            </label>
+            <label>
+                <span>Email</span>
+                <input type="email" />
+            </label>
+            <label>
+                <span>密码</span>
+                <input type="password" />
+            </label>
+            <button type="button" class="submit">注册</button>
+            <button type="button" class="fb-btn">使用 <span>facebook</span></button>
+        </div>
+    </div>
+</div>
+
+
+</body>
+<script src="/static/js/sign-in.js" th:src="@{/static/js/sign-in.js}"></script>
+</html>

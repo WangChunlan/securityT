@@ -1,0 +1,32 @@
+package com.security.properties;
+
+import com.security.filter.ValidateCodeFilter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
+
+/**
+ * @ClassName MySecurityProperties
+ * @Description  配置application中的扫描前缀属性
+ *         @ConfigurationProperties         只扫描 以 com.security 的属性
+ * @Author wangchunlan
+ * @Date 2018/8/20 10:54
+ * @Version 1.0
+ **/
+
+
+//@Configuration
+@ConfigurationProperties(prefix = "com.security")
+public class MySecurityProperties {
+
+    private ValidateCodeProperties code=new ValidateCodeProperties();
+
+    public ValidateCodeProperties getCode() {
+        return code;
+    }
+
+    public void setCode(ValidateCodeProperties code) {
+        this.code = code;
+    }
+}
