@@ -15,6 +15,7 @@ public class ValidateCodeProperties {
 
 
 
+
     public ImageCodeProperties getImage() {
         return image;
     }

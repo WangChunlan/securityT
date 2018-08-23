@@ -1,10 +1,6 @@
 package com.security.properties;
 
-import com.security.filter.ValidateCodeFilter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 /**
  * @ClassName MySecurityProperties

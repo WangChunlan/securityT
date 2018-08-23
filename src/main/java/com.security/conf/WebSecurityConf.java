@@ -1,9 +1,14 @@
 package com.security.conf;
 
 import com.security.details.MyUserDetails;
-import com.security.filter.ValidateCodeFilter;
+
+
+
 import com.security.handler.MyAuthenticationFailureHandler;
 import com.security.handler.MyAuthenticationSuccessHandler;
+import com.security.properties.MySecurityProperties;
+import com.security.filter.SmsValidateCodeFilter;
+import com.security.sms.SmsCodeAuthenticationSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,13 +25,13 @@ import javax.sql.DataSource;
 
 /**
  * @Author wangchunlan
- * @Description //TODO  验证码 注入有问题
+ * @Description
  * @Date 13:15 2018/8/20
- * @Param 
- * @return 
+ * @Param
+ * @return
  **/
 @Configuration
-//@EnableWebSecurity
+
 public class WebSecurityConf extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -37,44 +42,62 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
     private MyUserDetails myUserDetails;
     @Autowired
     private DataSource dataSource;
+    @Autowired
+    private MySecurityProperties securityProperty;
 
+
+
+    @Autowired
+    private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
     @Bean
-    public PersistentTokenRepository persistentTokenRepository(){
-        JdbcTokenRepositoryImpl tokenRepository=new JdbcTokenRepositoryImpl();
+    public PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
         tokenRepository.setDataSource(dataSource);
 //        tokenRepository.setCreateTableOnStartup(true);   // 仅仅第一次是可以用的
-        return  tokenRepository;
-
+        return tokenRepository;
     }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        ValidateCodeFilter validateCodeFilter =new ValidateCodeFilter();
-        validateCodeFilter.setFailureHandler(faileHandler);
+//        ValidateCodeFilter validateCodeFilter =new ValidateCodeFilter();
+//        validateCodeFilter.setFailureHandler(faileHandler);
+//        validateCodeFilter.setSecurityProperties(securityProperty);
+//        validateCodeFilter.afterPropertiesSet();
+
+
+        SmsValidateCodeFilter smsFilter = new SmsValidateCodeFilter();
+        smsFilter.setFailureHandler(faileHandler);
+        smsFilter.setSecurityProperties(securityProperty);
+        smsFilter.afterPropertiesSet();
+
 
         http
-                .addFilterBefore(validateCodeFilter,UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(smsFilter,UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(validateCodeFilter,UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(smsFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin()
                 .loginPage("/login")
-                .loginProcessingUrl("/login/loginForm")
+                .loginProcessingUrl("/login/loginForm")   // 图片验证码
+                .loginProcessingUrl("/login/mobile")    // 短信验证码
                 .successHandler(successHandler)
                 .failureHandler(faileHandler)
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login/**","/code/image").permitAll()
+                .antMatchers("/login/**", "/code/image", "/code/sms").permitAll()
                 .anyRequest()
                 .authenticated()
-                // remember-me
+                // remember-me   TODO 测试 验证码   ，暂时去掉
                 .and()
                 .rememberMe()
                 .tokenRepository(persistentTokenRepository())
                 .tokenValiditySeconds(60*60*24*7)
                 .userDetailsService(myUserDetails)
- ;
 
-        // 加http.csrf().disable()是为了防止报这个错Whitelabel Error Page
-        //This application has no explicit mapping for /error, so you are seeing this as a fallback.
-              http .csrf().disable();
+        ;
+        http.csrf().disable()
+        .apply(smsCodeAuthenticationSecurityConfig)
+        ;
 
     }
 
@@ -85,7 +108,7 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
 
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

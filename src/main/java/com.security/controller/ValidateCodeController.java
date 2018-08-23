@@ -1,10 +1,15 @@
 package com.security.controller;
 
-import com.security.properties.MySecurityProperties;
+import com.security.validateCode.ValidateCodeBeanConfig;
+import com.security.validateCode.ValidateCodeGenerator;
 import com.security.validateCode.image.ImageCode;
+import com.security.validateCode.image.ImageCodeGenerator;
+import com.security.validateCode.sms.SmsCode;
+import com.security.validateCode.sms.SmsCodeSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
+import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,10 +18,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Random;
 
 /**
  * @ClassName ValidateCodeController
@@ -28,81 +30,47 @@ import java.util.Random;
 @RestController
 public class ValidateCodeController {
     public static final String SESSION_KEY="SESSION_KEY_IMAGE_CODE";
+    public static final String SESSION_KEY_SMS="SESSION_KEY_SMS_CODE";
 
     private SessionStrategy sessionStrategy=new HttpSessionSessionStrategy();
 
+
     @Autowired
-    private  MySecurityProperties mySecurityProperties;
+    private ValidateCodeGenerator imageCodeGenerator;
+    @Autowired
+    private ValidateCodeGenerator smsCodeGenerator;
 
+    @Autowired
+    private SmsCodeSender smsCodeSender;
 
+    /**
+     * @Author wangchunlan
+     * @Description //TODO
+     * 创建验证码的过程：
+     * 生成--》存入session-->发送出去
+     * @Date 10:15 2018/8/22
+     * @Param [response, request]
+     * @return void
+     **/
 
     @GetMapping("/code/image")
     public void createCode(HttpServletResponse response, HttpServletRequest request) throws IOException {
         response.setContentType("image/jpg");
-        ImageCode imageCode=createImageCode(new ServletWebRequest(request));
+        ImageCode imageCode=(ImageCode)imageCodeGenerator.generate(new ServletWebRequest(request));
         sessionStrategy.setAttribute(new ServletWebRequest(request),SESSION_KEY,imageCode);
         ImageIO.write(imageCode.getImage(),"JPEG",response.getOutputStream());
     }
 
+    @GetMapping("/code/sms")
+    public void createSmsCode(HttpServletResponse response, HttpServletRequest request) throws IOException, ServletRequestBindingException {
+        SmsCode smsCode=(SmsCode)smsCodeGenerator.generate(new ServletWebRequest(request));
+        sessionStrategy.setAttribute(new ServletWebRequest(request),SESSION_KEY_SMS,smsCode);
+        // 短信运行商
+        String mobile= ServletRequestUtils.getRequiredStringParameter(request,"mobile");
+        smsCodeSender.send(mobile,smsCode.getCode());
 
 
-    /**
-     * 生成随机数字
-     * @param request
-     * @return
-     */
-    public   ImageCode createImageCode(ServletWebRequest request) {
-        int width =ServletRequestUtils.getIntParameter(request.getRequest(),"width",mySecurityProperties.getCode().getImage().getWidth());
-        int height =ServletRequestUtils.getIntParameter(request.getRequest(),"width",mySecurityProperties.getCode().getImage().getHeight());
-        int length=ServletRequestUtils.getIntParameter(request.getRequest(),"length",mySecurityProperties.getCode().getImage().getLength());
-        int expireIn=ServletRequestUtils.getIntParameter(request.getRequest(),"expireIn",mySecurityProperties.getCode().getImage().getExpireIn());
 
-        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        Graphics g = image.getGraphics();
-        Random random = new Random();
-
-        g.setColor(getRandColor(200, 250));
-        g.fillRect(0, 0, width, height);
-        g.setFont(new Font("Times New Roman", Font.ITALIC, 20));
-        g.setColor(getRandColor(160, 200));
-        for (int i = 0; i < 155; i++) {
-            int x = random.nextInt(width);
-            int y = random.nextInt(height);
-            int xl = random.nextInt(12);
-            int yl = random.nextInt(12);
-            g.drawLine(x, y, x + xl, y + yl);
-        }
-        String sRand = "";
-
-        for (int i = 0; i < length; i++) {
-            String rand = String.valueOf(random.nextInt(10));
-            sRand += rand;
-            g.setColor(new Color(20 + random.nextInt(110), 20 + random.nextInt(110), 20 + random.nextInt(110)));
-            g.drawString(rand, 13 * i + 6, 16);
-        }
-        g.dispose();
-        return new ImageCode(image, sRand,expireIn);
-    }
-
-
-    /**
-     * 生成背景条形纹
-     * @param fc
-     * @param bc
-     * @return
-     */
-    public static Color getRandColor(int fc, int bc) {
-        Random random = new Random();
-        if (fc > 255) {
-            fc = 255;
-        }
-        if (bc > 255) {
-            bc = 255;
-        }
-        int r = fc + random.nextInt(bc - fc);
-        int g = fc + random.nextInt(bc - fc);
-        int b = fc + random.nextInt(bc - fc);
-        return new Color(r, g, b);
     }
 
 }
