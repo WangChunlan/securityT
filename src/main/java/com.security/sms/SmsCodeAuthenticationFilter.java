@@ -17,18 +17,35 @@ import javax.servlet.http.HttpServletResponse;
  *      参照 普通的登录  过滤器  UsernamePasswordAuthenticationFilter
  *      copy  他的源码
  *
+ *
+ *
  * @Author wangchunlan
  * @Date 2018/8/23 9:38
  * @Version 1.0
  **/
+/**
+ * @Author wangchunlan
+ * @Description //TODO
+ *          1 认证请求的方法必须为POST
+ *          2 从request中获取手机号
+ *          3 封装成自己的Authentication 的实现类SmsCodeAuthenticationToken(未认证)
+ *          4、调用AuthenticationManager的authenticate 方法进行验证（即SmsCodeAuthenticationProvider）
+ * @Date 13:44 2018/8/23
+ * @Param 
+ * @return 
+ **/ 
+
 public class SmsCodeAuthenticationFilter  extends AbstractAuthenticationProcessingFilter {
     // 参数名字
     public static final String SPRING_SECURITY_FORM_MOBILE_KEY = "mobile";
+    // 请求参数key
     private String mobileParameter = SPRING_SECURITY_FORM_MOBILE_KEY;
 
+    // 是否只支持post
     private boolean postOnly = true;
 
     public SmsCodeAuthenticationFilter() {
+        // 请求接口url
         super(new AntPathRequestMatcher("/login/mobile", "POST"));
     }
 
@@ -36,14 +53,19 @@ public class SmsCodeAuthenticationFilter  extends AbstractAuthenticationProcessi
         if (this.postOnly && !request.getMethod().equals("POST")) {
             throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
         } else {
+            // 根据请求参数名，获取请求value
             String mobile = this.obtainMobile(request);
             if (mobile == null) {
                 mobile = "";
             }
 
             mobile = mobile.trim();
+            // 生成对应的authenticationToken
+//            创建SmsCodeAuthenticationToken(未认证)
             SmsCodeAuthenticationToken authRequest = new SmsCodeAuthenticationToken(mobile);
-            this.setDetails(request, authRequest);
+//设置用户信息
+            setDetails(request, authRequest);
+//            返回Authentication实例
             return this.getAuthenticationManager().authenticate(authRequest);
         }
     }
@@ -63,10 +85,6 @@ public class SmsCodeAuthenticationFilter  extends AbstractAuthenticationProcessi
     protected void setDetails(HttpServletRequest request, SmsCodeAuthenticationToken authRequest) {
         authRequest.setDetails(this.authenticationDetailsSource.buildDetails(request));
     }
-
-
-
-
 
     public void setPostOnly(boolean postOnly) {
         this.postOnly = postOnly;

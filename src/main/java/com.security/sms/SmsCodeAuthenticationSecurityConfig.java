@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
@@ -31,15 +32,18 @@ public class SmsCodeAuthenticationSecurityConfig  extends SecurityConfigurerAdap
 
 
 
+
     @Override
     public void configure(HttpSecurity builder) throws Exception {
+//        自定义SmsCodeAuthenticationFilter过滤器
         SmsCodeAuthenticationFilter smsCodeAuthenticationFilter=new SmsCodeAuthenticationFilter();
         smsCodeAuthenticationFilter.setAuthenticationManager(builder.getSharedObject(AuthenticationManager.class));
         smsCodeAuthenticationFilter.setAuthenticationSuccessHandler(successHandler);
         smsCodeAuthenticationFilter.setAuthenticationFailureHandler(faileHandler);
-
+//设置自定义SmsCodeAuthenticationProvider 的认证器userDetailsService
         SmsCodeAuthenticationProvider smsCodeAuthenticationProvider=new SmsCodeAuthenticationProvider();
-        smsCodeAuthenticationProvider.setUserDetails(myUserDetails);
+        smsCodeAuthenticationProvider.setUserDetailsService(myUserDetails);
+//  在UsernamePasswordAuthenticationFilter过滤器前执行
         builder.authenticationProvider(smsCodeAuthenticationProvider)
                 .addFilterAfter(smsCodeAuthenticationFilter,UsernamePasswordAuthenticationFilter.class);
     }

@@ -1,16 +1,16 @@
 package com.security.sms;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.security.details.MyUserDetails;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
  * @ClassName SmsCodeAuthenticationProvider
+ *          对应用户名密码登录的 DaoAuthenticationProvider
  * @Description TODO
  * @Author wangchunlan
  * @Date 2018/8/23 10:19
@@ -19,17 +19,24 @@ import org.springframework.security.core.userdetails.UserDetails;
  **/
 public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
 
-    @Autowired
-    private MyUserDetails userDetails;
 
+
+    private UserDetailsService userDetailsService; // 这个是spring框架自带的
+
+    /**
+     *  身份逻辑验证
+     *
+     **/
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         SmsCodeAuthenticationToken authenticationToken=(SmsCodeAuthenticationToken)authentication;
 
-        UserDetails user=userDetails.loadUserByUsername((String) authenticationToken.getPrincipal());
+//        自定义的userDetailsService 认证
+        UserDetails user=userDetailsService.loadUserByUsername((String) authenticationToken.getPrincipal());
         if(user ==null){
             throw new InternalAuthenticationServiceException("无法获取用户信息");
         }
+        //如果user不为空重新构建SmsCodeAuthenticationToken（已认证）
         SmsCodeAuthenticationToken authenticationTokenResult= new SmsCodeAuthenticationToken(user,user.getAuthorities());
 
         authenticationTokenResult.setDetails(authenticationToken.getDetails());
@@ -41,11 +48,11 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
         return SmsCodeAuthenticationToken.class.isAssignableFrom(aClass);
     }
 
-    public MyUserDetails getUserDetails() {
-        return userDetails;
+    public UserDetailsService getUserDetailsService() {
+        return userDetailsService;
     }
 
-    public void setUserDetails(MyUserDetails userDetails) {
-        this.userDetails = userDetails;
+    public void setUserDetailsService(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
     }
 }

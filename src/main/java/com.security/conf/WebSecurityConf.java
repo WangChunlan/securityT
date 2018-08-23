@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -40,6 +41,9 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
     private MyAuthenticationFailureHandler faileHandler;
     @Autowired
     private MyUserDetails myUserDetails;
+
+
+
     @Autowired
     private DataSource dataSource;
     @Autowired
@@ -93,7 +97,6 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
                 .tokenRepository(persistentTokenRepository())
                 .tokenValiditySeconds(60*60*24*7)
                 .userDetailsService(myUserDetails)
-
         ;
         http.csrf().disable()
         .apply(smsCodeAuthenticationSecurityConfig)

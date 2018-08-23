@@ -11,6 +11,8 @@ import java.util.Collection;
  *
  *          复制 UsernamePasswordAuthenticationToken
  *          写一个类似的与UsernamePasswordAuthenticationToken 的工具来认证短信验证码
+ *
+ *
  * @Description TODO
  * @Author wangchunlan
  * @Date 2018/8/23 9:31
@@ -21,12 +23,13 @@ public class SmsCodeAuthenticationToken   extends AbstractAuthenticationToken {
     private final Object principal;
 //    private Object credentials; // 在 UsernamePasswordAuthenticationToken 中这个属性是存的密码
 
+    // SmsCodeAuthenticationFilter中构建的未认证的Authentication
     public SmsCodeAuthenticationToken(String mobile ) {
         super((Collection)null);
         this.principal = mobile;
         this.setAuthenticated(false);
     }
-
+// SmsCodeAuthenticationProvider中构建已认证的Authentication
     public SmsCodeAuthenticationToken(Object principal, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.principal = principal;
