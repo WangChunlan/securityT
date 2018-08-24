@@ -21,7 +21,6 @@ import java.util.Collection;
 public class SmsCodeAuthenticationToken   extends AbstractAuthenticationToken {
     private static final long serialVersionUID = 500L;
     private final Object principal;
-//    private Object credentials; // 在 UsernamePasswordAuthenticationToken 中这个属性是存的密码
 
     // SmsCodeAuthenticationFilter中构建的未认证的Authentication
     public SmsCodeAuthenticationToken(String mobile ) {
@@ -29,7 +28,7 @@ public class SmsCodeAuthenticationToken   extends AbstractAuthenticationToken {
         this.principal = mobile;
         this.setAuthenticated(false);
     }
-// SmsCodeAuthenticationProvider中构建已认证的Authentication
+// SmsCodeAuthenticationProvider中构建已认证的 Authentication
     public SmsCodeAuthenticationToken(Object principal, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.principal = principal;

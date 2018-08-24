@@ -1,6 +1,5 @@
 package com.security.sms;
 
-import com.security.details.MyUserDetails;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
@@ -19,9 +18,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
  **/
 public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
 
-
-
-    private UserDetailsService userDetailsService; // 这个是spring框架自带的
+    private UserDetailsService userDetailsService; // 这个是spring框架中自己的
 
     /**
      *  身份逻辑验证
