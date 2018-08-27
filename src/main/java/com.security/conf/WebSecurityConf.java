@@ -78,7 +78,6 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
 
 
         http
-//                .addFilterBefore(smsFilter,UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(validateCodeFilter,UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(smsFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin()
@@ -92,7 +91,6 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
                 // 短信验证码不需要用loginProcessingUrl
                 .successHandler(successHandler)
                 .failureHandler(faileHandler)
-
                 .and()
                 .authorizeRequests()
                 .antMatchers("/login/**", "/code/image", "/code/sms").permitAll()
