@@ -30,15 +30,11 @@ import java.io.IOException;
  **/
 @RestController
 public class ValidateCodeController {
-
     private SessionStrategy sessionStrategy=new HttpSessionSessionStrategy();
-
-
     @Autowired
     private ValidateCodeGenerator imageCodeGenerator;
     @Autowired
     private ValidateCodeGenerator smsCodeGenerator;
-
     @Autowired
     private SmsCodeSender smsCodeSender;
 
@@ -52,7 +48,7 @@ public class ValidateCodeController {
      * @return void
      **/
 
-    @GetMapping("/code/image")
+    @GetMapping(SecurityConstants.DEFAULT_IMAGECODE_PROCESSING_URL)
     public void createCode(HttpServletResponse response, HttpServletRequest request) throws IOException {
         response.setContentType("image/jpg");
         ImageCode imageCode=(ImageCode)imageCodeGenerator.generate(new ServletWebRequest(request));
@@ -60,15 +56,13 @@ public class ValidateCodeController {
         ImageIO.write(imageCode.getImage(),"JPEG",response.getOutputStream());
     }
 
-    @GetMapping("/code/sms")
+    @GetMapping(SecurityConstants.DEFAULT_SMSCODE_PROCESSING_URL)
     public void createSmsCode(HttpServletResponse response, HttpServletRequest request) throws IOException, ServletRequestBindingException {
         SmsCode smsCode=(SmsCode)smsCodeGenerator.generate(new ServletWebRequest(request));
         sessionStrategy.setAttribute(new ServletWebRequest(request),SecurityConstants.DEFAULT_SESSION_KEY_FOR_CODE_SMS,smsCode);
         // 短信运行商
-        String mobile= ServletRequestUtils.getRequiredStringParameter(request,"mobile");
+        String mobile= ServletRequestUtils.getRequiredStringParameter(request,SecurityConstants.DEFAULT_PARAMETER_NAME_MOBILE);
         smsCodeSender.send(mobile,smsCode.getCode());
-
-
 
     }
 

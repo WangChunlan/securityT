@@ -1,6 +1,7 @@
 package com.security.validateCode;
 
-import com.security.properties.ImageCodeProperties;
+import com.security.newcode.ValidateCodeVerify;
+import com.security.newcode.ValidateCodeVerifyImpl;
 import com.security.properties.MySecurityProperties;
 import com.security.validateCode.image.ImageCodeGenerator;
 import com.security.validateCode.sms.DefaultSmsCodeSender;
@@ -36,4 +37,13 @@ public class ValidateCodeBeanConfig {
     public SmsCodeSender smsCodeSender(){
         return new DefaultSmsCodeSender();
     }
+
+    @Bean
+//    @ConditionalOnMissingBean(name="smsCodeSender")
+    @ConditionalOnMissingBean(ValidateCodeVerify.class)
+    public ValidateCodeVerify validateCodeVerify(){
+        return new ValidateCodeVerifyImpl();
+    }
+
+
 }

@@ -8,6 +8,7 @@ import com.security.handler.MyAuthenticationFailureHandler;
 import com.security.handler.MyAuthenticationSuccessHandler;
 import com.security.properties.MySecurityProperties;
 import com.security.filter.SmsValidateCodeFilter;
+import com.security.properties.SecurityConstants;
 import com.security.sms.SmsCodeAuthenticationSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +32,7 @@ import javax.sql.DataSource;
  * @Param
  * @return
  **/
-@Configuration
+//@Configuration
 public class WebSecurityConf extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -40,9 +41,6 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
     private MyAuthenticationFailureHandler faileHandler;
     @Autowired
     private MyUserDetails myUserDetails;
-
-
-
     @Autowired
     private DataSource dataSource;
     @Autowired
@@ -81,12 +79,12 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(validateCodeFilter,UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(smsFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin()
-                .loginPage("/login")
+                .loginPage(SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_FORM)
                 .successHandler(successHandler)
                 .failureHandler(faileHandler)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login/**", "/code/image", "/code/sms").permitAll()
+                .antMatchers("/login/**", SecurityConstants.DEFAULT_IMAGECODE_PROCESSING_URL, SecurityConstants.DEFAULT_SMSCODE_PROCESSING_URL).permitAll()
                 .anyRequest()
                 .authenticated()
                 // remember-me   TODO 测试 验证码   ，暂时去掉
