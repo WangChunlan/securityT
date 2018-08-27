@@ -81,14 +81,7 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(validateCodeFilter,UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(smsFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin()
-                /**
-                 *   .loginPage("/login") 如果自定义的界面 叫login  那么 login界面的action 的值也为login  那么就不需要写   .loginProcessingUrl("/login")，默认会去找它。
-                 *              如果 login界面的action 的值也为不为login，那么就需要写.loginProcessingUrl("")  里面的值需要对应起来。
-                 **/
                 .loginPage("/login")
-//                .loginProcessingUrl("/login/loginForm")   // 图片验证码
-//                .loginProcessingUrl("/login/mobile")    // 短信验证码
-                // 短信验证码不需要用loginProcessingUrl
                 .successHandler(successHandler)
                 .failureHandler(faileHandler)
                 .and()
