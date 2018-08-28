@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -70,7 +70,7 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
         validateCodeFilter.afterPropertiesSet();
 
 
-//        TODO 这个有问题 未能注入  bean
+
         SmsValidateCodeFilter smsFilter = new SmsValidateCodeFilter();
         smsFilter.setFailureHandler(faileHandler);
         smsFilter.setSecurityProperties(securityProperty);
