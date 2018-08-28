@@ -1,5 +1,6 @@
 package com.security.controller;
 
+import com.security.properties.SecurityConstants;
 import com.security.validateCode.ValidateCodeBeanConfig;
 import com.security.validateCode.ValidateCodeGenerator;
 import com.security.validateCode.image.ImageCode;
@@ -29,17 +30,11 @@ import java.io.IOException;
  **/
 @RestController
 public class ValidateCodeController {
-    public static final String SESSION_KEY="SESSION_KEY_IMAGE_CODE";
-    public static final String SESSION_KEY_SMS="SESSION_KEY_SMS_CODE";
-
     private SessionStrategy sessionStrategy=new HttpSessionSessionStrategy();
-
-
     @Autowired
     private ValidateCodeGenerator imageCodeGenerator;
     @Autowired
     private ValidateCodeGenerator smsCodeGenerator;
-
     @Autowired
     private SmsCodeSender smsCodeSender;
 
@@ -53,23 +48,21 @@ public class ValidateCodeController {
      * @return void
      **/
 
-    @GetMapping("/code/image")
+    @GetMapping(SecurityConstants.DEFAULT_IMAGECODE_PROCESSING_URL)
     public void createCode(HttpServletResponse response, HttpServletRequest request) throws IOException {
         response.setContentType("image/jpg");
         ImageCode imageCode=(ImageCode)imageCodeGenerator.generate(new ServletWebRequest(request));
-        sessionStrategy.setAttribute(new ServletWebRequest(request),SESSION_KEY,imageCode);
+        sessionStrategy.setAttribute(new ServletWebRequest(request),SecurityConstants.DEFAULT_SESSION_KEY_FOR_CODE_IMAGE,imageCode);
         ImageIO.write(imageCode.getImage(),"JPEG",response.getOutputStream());
     }
 
-    @GetMapping("/code/sms")
+    @GetMapping(SecurityConstants.DEFAULT_SMSCODE_PROCESSING_URL)
     public void createSmsCode(HttpServletResponse response, HttpServletRequest request) throws IOException, ServletRequestBindingException {
         SmsCode smsCode=(SmsCode)smsCodeGenerator.generate(new ServletWebRequest(request));
-        sessionStrategy.setAttribute(new ServletWebRequest(request),SESSION_KEY_SMS,smsCode);
+        sessionStrategy.setAttribute(new ServletWebRequest(request),SecurityConstants.DEFAULT_SESSION_KEY_FOR_CODE_SMS,smsCode);
         // 短信运行商
-        String mobile= ServletRequestUtils.getRequiredStringParameter(request,"mobile");
+        String mobile= ServletRequestUtils.getRequiredStringParameter(request,SecurityConstants.DEFAULT_PARAMETER_NAME_MOBILE);
         smsCodeSender.send(mobile,smsCode.getCode());
-
-
 
     }
 

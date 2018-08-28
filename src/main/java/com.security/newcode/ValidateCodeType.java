@@ -1,41 +1,51 @@
-package com.security.validateCode;
+/**
+ *
+ */
+package com.security.newcode;
+
 
 import com.security.properties.SecurityConstants;
 
 /**
- * @ClassName ValidateCodeType
- * @Description TODO
- * @Author wangchunlan
- * @Date 2018/8/21 9:11
- * @Version 1.0
- **/
+ * @author zhailiang
+ */
 public enum ValidateCodeType {
+
+    /**
+     * 短信验证码
+     */
     SMS {
+        @Override
         public String getParamNameOnValidate() {
             return SecurityConstants.DEFAULT_PARAMETER_NAME_CODE_SMS;
         }
 
-        public String getSessionKey(){
+        @Override
+        public String getSessionKey() {
             return SecurityConstants.DEFAULT_SESSION_KEY_FOR_CODE_SMS;
         }
     },
+    /**
+     * 图片验证码
+     */
     IMAGE {
+        @Override
         public String getParamNameOnValidate() {
             return SecurityConstants.DEFAULT_PARAMETER_NAME_CODE_IMAGE;
         }
-
-        public String getSessionKey(){
+        @Override
+        public String getSessionKey() {
             return SecurityConstants.DEFAULT_SESSION_KEY_FOR_CODE_IMAGE;
         }
     };
 
     /**
-     * 校验时从请求中获取的参数名字
+     * 校验时从请求中获取的参数的名字
+     *
      * @return
      */
     public abstract String getParamNameOnValidate();
 
     public abstract String getSessionKey();
-
 
 }

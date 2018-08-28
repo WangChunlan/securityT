@@ -4,6 +4,7 @@ import com.security.controller.ValidateCodeController;
 import com.security.exception.ValidateCodeException;
 import com.security.handler.MyAuthenticationFailureHandler;
 import com.security.properties.MySecurityProperties;
+import com.security.properties.SecurityConstants;
 import com.security.validateCode.image.ImageCode;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jdt.internal.antadapter.AntAdapterMessages;
@@ -90,7 +91,7 @@ public class ValidateCodeFilter  extends OncePerRequestFilter implements Initial
 
     }
     private void validate(ServletWebRequest request) throws ServletRequestBindingException, ValidateCodeException {
-        ImageCode codeInSession =(ImageCode)sessionStrategy.getAttribute(request,ValidateCodeController.SESSION_KEY);
+        ImageCode codeInSession =(ImageCode)sessionStrategy.getAttribute(request,SecurityConstants.DEFAULT_SESSION_KEY_FOR_CODE_IMAGE);
 
         String codeInRequest=ServletRequestUtils.getStringParameter(request.getRequest(),"imageCode");
 
@@ -103,7 +104,7 @@ public class ValidateCodeFilter  extends OncePerRequestFilter implements Initial
             throw  new ValidateCodeException("验证码不存在");
         }
         if(codeInSession.isExpried()){
-            sessionStrategy.removeAttribute(request,ValidateCodeController.SESSION_KEY);
+            sessionStrategy.removeAttribute(request,SecurityConstants.DEFAULT_SESSION_KEY_FOR_CODE_IMAGE);
             logger.info("验证码已过期");
             throw  new ValidateCodeException("验证码已过期");
         }
@@ -112,7 +113,7 @@ public class ValidateCodeFilter  extends OncePerRequestFilter implements Initial
             throw  new ValidateCodeException("验证码不匹配");
         }
 
-        sessionStrategy.removeAttribute(request,ValidateCodeController.SESSION_KEY);
+        sessionStrategy.removeAttribute(request,SecurityConstants.DEFAULT_SESSION_KEY_FOR_CODE_IMAGE);
 
     }
 

@@ -8,6 +8,7 @@ import com.security.handler.MyAuthenticationFailureHandler;
 import com.security.handler.MyAuthenticationSuccessHandler;
 import com.security.properties.MySecurityProperties;
 import com.security.filter.SmsValidateCodeFilter;
+import com.security.properties.SecurityConstants;
 import com.security.sms.SmsCodeAuthenticationSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +32,7 @@ import javax.sql.DataSource;
  * @Param
  * @return
  **/
-@Configuration
+//@Configuration
 public class WebSecurityConf extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -40,9 +41,6 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
     private MyAuthenticationFailureHandler faileHandler;
     @Autowired
     private MyUserDetails myUserDetails;
-
-
-
     @Autowired
     private DataSource dataSource;
     @Autowired
@@ -81,19 +79,12 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(validateCodeFilter,UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(smsFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin()
-                /**
-                 *   .loginPage("/login") 如果自定义的界面 叫login  那么 login界面的action 的值也为login  那么就不需要写   .loginProcessingUrl("/login")，默认会去找它。
-                 *              如果 login界面的action 的值也为不为login，那么就需要写.loginProcessingUrl("")  里面的值需要对应起来。
-                 **/
-                .loginPage("/login")
-//                .loginProcessingUrl("/login/loginForm")   // 图片验证码
-//                .loginProcessingUrl("/login/mobile")    // 短信验证码
-                // 短信验证码不需要用loginProcessingUrl
+                .loginPage(SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_FORM)
                 .successHandler(successHandler)
                 .failureHandler(faileHandler)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login/**", "/code/image", "/code/sms").permitAll()
+                .antMatchers("/login/**", SecurityConstants.DEFAULT_IMAGECODE_PROCESSING_URL, SecurityConstants.DEFAULT_SMSCODE_PROCESSING_URL).permitAll()
                 .anyRequest()
                 .authenticated()
                 // remember-me   TODO 测试 验证码   ，暂时去掉
