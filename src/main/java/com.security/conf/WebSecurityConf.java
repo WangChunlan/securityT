@@ -5,6 +5,7 @@ import com.security.filter.ValidateCodeFilter;
 import com.security.handler.MyAuthenticationFailureHandler;
 import com.security.handler.MyAuthenticationSuccessHandler;
 import com.security.sms.SmsCodeAuthenticationSecurityConfig;
+import com.security.utils.SecurityConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,13 +22,12 @@ import javax.sql.DataSource;
 
 /**
  * @Author wangchunlan
- * @Description //TODO  验证码 注入有问题
+ * @Description
  * @Date 13:15 2018/8/20
- * @Param 
- * @return 
+ * @Param
+ * @return
  **/
 @Configuration
-//@EnableWebSecurity
 public class WebSecurityConf extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -40,7 +40,6 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
     private DataSource dataSource;
     @Autowired
     private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
-
     @Bean
     public PersistentTokenRepository persistentTokenRepository(){
         JdbcTokenRepositoryImpl tokenRepository=new JdbcTokenRepositoryImpl();
@@ -58,13 +57,12 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(validateCodeFilter,UsernamePasswordAuthenticationFilter.class)
                 .formLogin()
                 .loginPage("/login")
-                .loginProcessingUrl("/login/loginForm")
                 .successHandler(successHandler)
                 .failureHandler(faileHandler)
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login/**","/code/image").permitAll()
+                .antMatchers("/login/**", SecurityConstants.DEFAULT_IMAGECODE_PROCESSING_URL, SecurityConstants.DEFAULT_SMSCODE_PROCESSING_URL).permitAll()
                 .anyRequest()
                 .authenticated()
                 // remember-me
@@ -77,7 +75,7 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
 
 
               http .csrf().disable()
-              . apply(smsCodeAuthenticationSecurityConfig);
+                      .apply(smsCodeAuthenticationSecurityConfig);
 
     }
 

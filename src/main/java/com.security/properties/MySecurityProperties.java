@@ -17,6 +17,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class MySecurityProperties {
 
     private ValidateCodeProperties code=new ValidateCodeProperties();
+    private BrowserProperty browser = new BrowserProperty();
 
     public ValidateCodeProperties getCode() {
         return code;
@@ -24,5 +25,13 @@ public class MySecurityProperties {
 
     public void setCode(ValidateCodeProperties code) {
         this.code = code;
+    }
+
+    public BrowserProperty getBrowser() {
+        return browser;
+    }
+
+    public void setBrowser(BrowserProperty browser) {
+        this.browser = browser;
     }
 }

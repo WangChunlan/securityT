@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
  * @return 
  **/ 
 
-public class SmsCodeAuthenticationFilter  extends AbstractAuthenticationProcessingFilter {
+public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
     // 参数名字
     public static final String SPRING_SECURITY_FORM_MOBILE_KEY = "mobile";
     // 请求参数key

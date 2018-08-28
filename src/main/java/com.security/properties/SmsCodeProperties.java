@@ -7,7 +7,7 @@ package com.security.properties;
  * @Date 2018/8/20 10:52
  * @Version 1.0
  **/
-public class SmsCodeProperties extends  CodeProperties{
+public class SmsCodeProperties extends CodeProperties {
 
 
     public SmsCodeProperties() {

@@ -74,7 +74,6 @@ public class SmsValidateCodeFilter extends OncePerRequestFilter implements Initi
             }
         }
 
-//        if(StringUtils.equals("/login/loginForm",httpServletRequest.getRequestURI())&&StringUtils.equalsIgnoreCase(httpServletRequest.getMethod(),"post")){
         if (action) {
             try {
                 validate(new ServletWebRequest(httpServletRequest));

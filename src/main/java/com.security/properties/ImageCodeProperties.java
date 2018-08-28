@@ -7,7 +7,7 @@ package com.security.properties;
  * @Date 2018/8/20 10:52
  * @Version 1.0
  **/
-public class ImageCodeProperties  extends SmsCodeProperties {
+public class ImageCodeProperties  extends  CodeProperties{
     private int width=67;
     private int height=23;
 
@@ -15,8 +15,16 @@ public class ImageCodeProperties  extends SmsCodeProperties {
     public ImageCodeProperties() {
         setLength(4);
     }
+    public ImageCodeProperties(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
 
-
+    public ImageCodeProperties(int width, int height, int length, int expireIn, int width1, int height1) {
+        super(width, height, length, expireIn);
+        this.width = width1;
+        this.height = height1;
+    }
 
     public int getWidth() {
         return width;
@@ -33,7 +41,6 @@ public class ImageCodeProperties  extends SmsCodeProperties {
     public void setHeight(int height) {
         this.height = height;
     }
-
 
 
 }
