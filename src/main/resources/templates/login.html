@@ -71,7 +71,28 @@
         </div>
     </div>
 </div>
-
+<div align="center">
+    <!--短信登录-->
+    <form  th:action="@{/login/mobile}" method="post">
+        <div class="form sign-in">
+            <h2>欢迎回来,</h2>
+            <label>
+                <span>手机号：</span>
+                <input type="text" name="mobile" value="15621493371"/>
+            </label>
+            <label>
+                <span>短信验证码：</span>
+                <input type="text" name="smsCode" />
+                <a href="/code/sms?mobile=15621493371">发送验证码</a>
+            </label>
+            <input type="submit" class="submit input_button"  value="登录">
+        </div>
+    </form>
+    <hr/>
+    <!--社交登录-->
+    <h2>社交登录</h2>
+    <a href="/auth/qq">QQ登录 </a>
+</div>
 
 </body>
 <script src="/static/js/sign-in.js" th:src="@{/static/js/sign-in.js}"></script>

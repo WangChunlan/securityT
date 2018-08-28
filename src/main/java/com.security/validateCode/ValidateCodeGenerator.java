@@ -1,6 +1,5 @@
 package com.security.validateCode;
 
-import com.security.filter.ValidateCodeFilter;
 import org.springframework.web.context.request.ServletWebRequest;
 
 /**

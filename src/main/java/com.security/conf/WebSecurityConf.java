@@ -4,6 +4,7 @@ import com.security.details.MyUserDetails;
 import com.security.filter.ValidateCodeFilter;
 import com.security.handler.MyAuthenticationFailureHandler;
 import com.security.handler.MyAuthenticationSuccessHandler;
+import com.security.sms.SmsCodeAuthenticationSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,6 +38,8 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
     private MyUserDetails myUserDetails;
     @Autowired
     private DataSource dataSource;
+    @Autowired
+    private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
 
     @Bean
     public PersistentTokenRepository persistentTokenRepository(){
@@ -72,9 +75,9 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
                 .userDetailsService(myUserDetails)
  ;
 
-        // 加http.csrf().disable()是为了防止报这个错Whitelabel Error Page
-        //This application has no explicit mapping for /error, so you are seeing this as a fallback.
-              http .csrf().disable();
+
+              http .csrf().disable()
+              . apply(smsCodeAuthenticationSecurityConfig);
 
     }
 
