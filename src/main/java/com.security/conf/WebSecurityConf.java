@@ -40,6 +40,11 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
     private DataSource dataSource;
     @Autowired
     private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
+
+
+
+
+
     @Bean
     public PersistentTokenRepository persistentTokenRepository(){
         JdbcTokenRepositoryImpl tokenRepository=new JdbcTokenRepositoryImpl();
@@ -65,6 +70,9 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login/**", SecurityConstants.DEFAULT_IMAGECODE_PROCESSING_URL, SecurityConstants.DEFAULT_SMSCODE_PROCESSING_URL).permitAll()
                 .anyRequest()
                 .authenticated()
+                // todo 1 qq
+
+
                 // remember-me
                 .and()
                 .rememberMe()

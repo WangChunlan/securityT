@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<html lang="en"   xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>登录界面</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/sign-in.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/sign-in.css" />
 </head>
 <body>
 <p class="tip">Click on button in image container</p>
@@ -31,7 +35,7 @@
             <input type="checkbox" name="remember-me" value="true" />
         </label>
         <p class="forgot-pass">忘记密码?</p>
-        <input type="submit" class="submit input_button"  value="登录">
+        <input type="submit" class="submit input_button"  value="登录"/>
 
         <button type="button" class="fb-btn">链接到 <span>facebook</span></button>
     </div>
@@ -84,7 +88,7 @@
                 <input type="text" name="smsCode" />
                 <a href="/code/sms?mobile=15621493371">发送验证码</a>
             </label>
-            <input type="submit" class="submit input_button"  value="登录">
+            <input type="submit" class="submit input_button"  value="登录"/>
         </div>
     </form>
     <hr/>
@@ -106,7 +110,7 @@
             <input type="text" name="smsCode" />
             <a href="/code/sms?mobile=15621493371">发送验证码</a>
         </label>
-        <input type="submit" class="submit input_button"  value="登录">
+        <input type="submit" class="submit input_button"  value="登录" />
     </div>
 </form>
 

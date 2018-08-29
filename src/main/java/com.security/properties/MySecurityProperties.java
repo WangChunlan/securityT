@@ -12,7 +12,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  **/
 
 
-//@Configuration
+
 @ConfigurationProperties(prefix = "com.security")
 public class MySecurityProperties {
 

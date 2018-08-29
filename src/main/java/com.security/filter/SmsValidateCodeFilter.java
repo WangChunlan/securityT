@@ -34,7 +34,7 @@ import java.util.Set;
  * @Date 2018/8/20 9:55
  * @Version 1.0
  **/
-//@Component
+
 public class SmsValidateCodeFilter extends OncePerRequestFilter implements InitializingBean {
 
     protected Logger logger
