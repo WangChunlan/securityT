@@ -13,7 +13,7 @@ import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MyUserDetails implements UserDetailsService{
+public class MyUserDetails implements UserDetailsService, SocialUserDetailsService{
     @Autowired
     private PasswordEncoder passwordEncoder;
     /**
@@ -25,8 +25,17 @@ public class MyUserDetails implements UserDetailsService{
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        String password = passwordEncoder.encode("123456");
-        return new User(username, password, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+        return buildUser(username);
     }
 
+
+    @Override
+    public SocialUserDetails loadUserByUserId(String userId) throws UsernameNotFoundException {
+        return buildUser(userId);
+    }
+
+    private SocialUserDetails buildUser(String userId) {
+        String password = passwordEncoder.encode("123456");
+        return new SocialUser(userId, password, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+    }
 }

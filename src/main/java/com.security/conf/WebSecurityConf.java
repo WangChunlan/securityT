@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.social.security.SpringSocialConfigurer;
 
 import javax.sql.DataSource;
 
@@ -41,9 +42,8 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
     @Autowired
     private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
 
-
-
-
+    @Autowired
+    private SpringSocialConfigurer socialConfigurer;
 
     @Bean
     public PersistentTokenRepository persistentTokenRepository(){
@@ -71,7 +71,8 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 // todo 1 qq
-
+                                .and()
+                .apply(socialConfigurer)   // qq
 
                 // remember-me
                 .and()
