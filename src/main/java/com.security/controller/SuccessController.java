@@ -10,4 +10,12 @@ public class SuccessController {
         return "success";
 
     }
+
+    @GetMapping("/documents")
+    public String documents(){
+        return "documents";
+
+    }
+
+
 }

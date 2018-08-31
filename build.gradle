@@ -1,6 +1,7 @@
 buildscript {
     ext {
         springBootVersion = '1.5.4.RELEASE'
+//        springBootVersion = '2.0.4.RELEASE'
         projectJdk = '1.8'
         projectGroup = 'com.security'
         projectVersion = '0.0.1'

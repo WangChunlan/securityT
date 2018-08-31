@@ -3,6 +3,7 @@
  */
 package com.security.social.weixin.properties;
 
+
 import org.springframework.boot.autoconfigure.social.SocialProperties;
 
 /**
