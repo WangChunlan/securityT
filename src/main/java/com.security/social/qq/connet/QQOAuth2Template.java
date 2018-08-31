@@ -30,7 +30,6 @@ public class QQOAuth2Template extends OAuth2Template {
         String expiresIn=StringUtils.substringAfterLast(items[1],"=");
         Long time=Long.valueOf(expiresIn);
         String refreshToken=StringUtils.substringAfterLast(items[2],"=");
-
         return new AccessGrant(accessToken,null,refreshToken,time);
     }
 
