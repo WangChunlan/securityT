@@ -9,6 +9,7 @@ import org.springframework.social.connect.UserProfile;
 import java.io.IOException;
 
 /**
+ * QQAdapter   在Api:AbstractOAuth2ApiBinding 和Connection ：OAuth2Connection做一个适配
  * @ClassName QQAdapter
  * @Description TODO
  * @Author wangchunlan
@@ -16,24 +17,33 @@ import java.io.IOException;
  * @Version 1.0
  **/
 public class QQAdapter implements ApiAdapter<QQ> {
+    /**
+     * 测试当前API是否可用
+     * @param api
+     * @return
+     */
     @Override
     public boolean test(QQ api) {
         return true;
     }
 
+    /**
+     * 在Connetcion和API之间做一个适配
+     * @param api
+     * @param values
+     */
     @Override
     public void setConnectionValues(QQ api, ConnectionValues values) {
 
             QQUserInfo userInfo=api.getUserInfo();
             values.setDisplayName(userInfo.getNickname());
             values.setImageUrl(userInfo.getFigureurl_qq_1());
-            values.setProfileUrl(null); //主页信息
-            values.setProviderUserId(userInfo.getOpenId());// 在接口中并没有这个参数
-
+            values.setProfileUrl(null); //QQ 没有主页信息
+            values.setProviderUserId(userInfo.getOpenId());
     }
 
     /**
-     *
+     * 通过API拿到标准的用户信息
      * @param api
      * @return
      */
@@ -43,7 +53,7 @@ public class QQAdapter implements ApiAdapter<QQ> {
     }
 
     /**
-     * 某些社交网站才会有这个
+     * 某些社交网站才会有这个 时间线
      * @param api
      * @param message
      */

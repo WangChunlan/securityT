@@ -43,7 +43,7 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
     private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
 
     @Autowired
-    private SpringSocialConfigurer socialConfigurer;
+    private SpringSocialConfigurer mySocialSecurityConfig; // 向当前的过滤器链上添加一个过滤器
 
     @Bean
     public PersistentTokenRepository persistentTokenRepository(){
@@ -64,15 +64,18 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .successHandler(successHandler)
                 .failureHandler(faileHandler)
-
+                // todo 1 qq
+                .and()
+                .apply(mySocialSecurityConfig)   // qq
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login/**", SecurityConstants.DEFAULT_IMAGECODE_PROCESSING_URL, SecurityConstants.DEFAULT_SMSCODE_PROCESSING_URL).permitAll()
+                .antMatchers("/login/**", SecurityConstants.DEFAULT_IMAGECODE_PROCESSING_URL,
+                        SecurityConstants.DEFAULT_SMSCODE_PROCESSING_URL,"/regist","/demoSignUp","/signUp").permitAll()
                 .anyRequest()
                 .authenticated()
-                // todo 1 qq
-                                .and()
-                .apply(socialConfigurer)   // qq
+//                // todo 1 qq
+//                                .and()
+//                .apply(mySocialSecurityConfig)   // qq
 
                 // remember-me
                 .and()

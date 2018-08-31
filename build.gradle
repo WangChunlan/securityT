@@ -5,7 +5,7 @@ buildscript {
         projectGroup = 'com.security'
         projectVersion = '0.0.1'
         projectName = 'securitydemo'
-        mavenUrl =  "http://192.168.0.14/nexus/repository/maven-public/";
+        mavenUrl = "http://192.168.0.14/nexus/repository/maven-public/";
     }
     repositories {
         mavenLocal()
@@ -57,41 +57,28 @@ dependencies {
     compile group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
     compile 'com.github.joschi.jackson:jackson-datatype-threetenbp:2.6.4'
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.6'
-    compile ('org.springframework.social:spring-social-web:1.1.0.RELEASE')
+    compile('org.springframework.social:spring-social-web:1.1.0.RELEASE')
 
+//    compile 'org.springframework.social:spring-social-config:1.1.6.RELEASE'  //    compile 'org.springframework.social:spring-social-facebook:2.0.3.RELEASE'
 
+//    compile 'org.springframework.social:spring-social-security:1.1.6.RELEASE'
+    compile 'org.springframework.social:spring-social-security:1.1.4.RELEASE'
 
-    /**
-     * todo :1. 无法导入 SocialConfigurerAdapter ，@EnableSocial
-     *          org.springframework.social.config.annotation.SocialConfigurerAdapter
-     *
-     *         原因：Spring Boot 2.0中已删除Spring Social的自动配置。
-     *         解决：->1.使用低版本  1.1.6    compile 'org.springframework.social:spring-social-config:1.1.6.RELEASE'
-     *              -> 2.使用spring-social-facebook:2.0.3  回去依赖1.1.4
-     *
-     *      * SocialConfigurerAdapter
-     *   *
-     */
-//    compile 'org.springframework.social:spring-social-config:1.1.6.RELEASE'
-    compile 'org.springframework.social:spring-social-facebook:2.0.3.RELEASE'
-
-    // todo  2 、SocialUserDetailsService 无法导入
-    /**
-     *  原包：spring-social-security
-     */
+    /*security */
+    compile 'org.springframework.social:spring-social-config:1.1.6.RELEASE'
     compile 'org.springframework.social:spring-social-security:1.1.6.RELEASE'
-
-
+    compile 'org.springframework.social:spring-social-core:1.1.6.RELEASE'
+    compile 'org.springframework.social:spring-social-web:1.1.6.RELEASE'
 
 
 }
 
 
 
-def creatDir={
+def creatDir = {
     path ->
-        File dir =new File(path);
-        if(!dir.exists()){
+        File dir = new File(path);
+        if (!dir.exists()) {
             dir.mkdirs();
         }
 }
@@ -104,22 +91,19 @@ task makeJavaDir() {
     }
 }
 
-
 // src main resources 项目目录结构
-task makeResourcesDir(){
+task makeResourcesDir() {
     dependsOn 'makeJavaDir';
-    def paths=['src/main/resources/templates','src/main/resources/static','src/main/resources/mappers','src/main/resources/views'];
+    def paths = ['src/main/resources/templates', 'src/main/resources/static', 'src/main/resources/mappers', 'src/main/resources/views'];
     doLast {
         paths.forEach(creatDir)
     }
 }
 
-
-
 // web 项目目录结构 包含了java项目目录结构
-task makeWebDir(){
+task makeWebDir() {
     dependsOn 'makeJavaDir';
-    def paths=['src/main/webapp','src/test/webapp'];
+    def paths = ['src/main/webapp', 'src/test/webapp'];
     doLast {
         paths.forEach(creatDir)
     }
