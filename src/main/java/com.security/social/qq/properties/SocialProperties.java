@@ -1,6 +1,9 @@
 package com.security.social.qq.properties;
 
+import com.security.social.weixin.properties.WeixinProperties;
+
 /**
+ * 自定义
  * @ClassName SocialProperties
  * @Description TODO
  * @Author wangchunlan
@@ -10,6 +13,16 @@ package com.security.social.qq.properties;
 public class SocialProperties {
     private  String filterProcessesUrl="/auth";
     private  QQProperties qq=new QQProperties();
+    private WeixinProperties weixin=new WeixinProperties();
+
+
+    public WeixinProperties getWeixin() {
+        return weixin;
+    }
+
+    public void setWeixin(WeixinProperties weixin) {
+        this.weixin = weixin;
+    }
 
     public QQProperties getQq() {
         return qq;

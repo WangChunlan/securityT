@@ -47,11 +47,6 @@ public class SocialConfig extends SocialConfigurerAdapter {
         if(connectionSignUp !=null){
             repository.setConnectionSignUp(connectionSignUp);
         }
-
-
-
-
-
         return repository;
     }
 
@@ -65,7 +60,6 @@ public class SocialConfig extends SocialConfigurerAdapter {
         return mySpringSocialConfigurer;
     }
 
-
     @Bean
     public ProviderSignInUtils providerSignInUtils(ConnectionFactoryLocator connectionFactoryLocator){
 
@@ -73,9 +67,5 @@ public class SocialConfig extends SocialConfigurerAdapter {
 
         };
     }
-
-
-
-
 
 }
