@@ -21,6 +21,9 @@ public class HelloController {
         return "judge";
     }
 
-
+    @GetMapping("/bangding")
+    public  String bangding(){
+        return "bangding";
+    }
 
 }
