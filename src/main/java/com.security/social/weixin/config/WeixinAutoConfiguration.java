@@ -4,7 +4,7 @@
 package com.security.social.weixin.config;
 
 import com.security.properties.MySecurityProperties;
-import com.security.social.weixin.ConnectionWXView;
+import com.security.social.weixin.view.ConnectionWXView;
 import com.security.social.weixin.connet.WeixinConnectionFactory;
 import com.security.social.weixin.properties.WeixinProperties;
 import org.springframework.beans.factory.annotation.Autowired;

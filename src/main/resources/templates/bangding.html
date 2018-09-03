@@ -11,6 +11,25 @@
     <form th:action="@{/connect/weixin}" method="post">
         <button type="submit">绑定微信</button>
     </form>
+    <br/>
+
+    <form th:action="@{/connect/weixin}" method="post">
+        <button type="submit">解绑微信</button>
+        <!--springboot会自动隐藏配置的http方法过滤器 -->
+        <input type="hidden" name="_method" value="DELETE" />
+    </form>
+</div>
+<div align="center">
+    <form th:action="@{/connect/qq}" method="post">
+        <button type="submit">绑定QQ</button>
+    </form>
+    <br/>
+
+    <form th:action="@{/connect/qq}" method="post">
+        <button type="submit">解绑QQ</button>
+        <!--springboot会自动隐藏配置的http方法过滤器 -->
+        <input type="hidden" name="_method" value="DELETE" />
+    </form>
 </div>
 
 </body>
