@@ -1,6 +1,6 @@
 package com.security.controller;
 
-import com.security.entity.User;
+import com.security.entity.MyUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class RegistController {
 
     @PostMapping("/regist")
     @ResponseBody
-    public void regist(User user, HttpServletRequest request){
+    public void regist(MyUser user, HttpServletRequest request){
         // 注册逻辑
         logger.info("注册成功");
         // 不管是注册用户还是绑定用户，都会拿到一个用户的唯一标识

@@ -4,6 +4,7 @@ import com.security.details.MyUserDetails;
 import com.security.filter.ValidateCodeFilter;
 import com.security.handler.MyAuthenticationFailureHandler;
 import com.security.handler.MyAuthenticationSuccessHandler;
+import com.security.session.ExpiredSessionStrategy;
 import com.security.sms.SmsCodeAuthenticationSecurityConfig;
 import com.security.utils.SecurityConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import org.springframework.social.security.SpringSocialConfigurer;
 
 import javax.sql.DataSource;
+import javax.websocket.Session;
 
 /**
  * @Author wangchunlan
@@ -64,27 +66,43 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .successHandler(successHandler)
                 .failureHandler(faileHandler)
-                // todo 1 qq
                 .and()
                 .apply(mySocialSecurityConfig)   // qq
-                .and()
-                .authorizeRequests()
-                .antMatchers("/login/**", SecurityConstants.DEFAULT_IMAGECODE_PROCESSING_URL,
-                        SecurityConstants.DEFAULT_SMSCODE_PROCESSING_URL,"/regist","/demoSignUp","/signUp").permitAll()
-                .anyRequest()
-                .authenticated()
-//                // todo 1 qq
-//                                .and()
-//                .apply(mySocialSecurityConfig)   // qq
-
-                // remember-me
-                .and()
+                .and() // remember-me
                 .rememberMe()
                 .tokenRepository(persistentTokenRepository())
                 .tokenValiditySeconds(60*60*24*7)
                 .userDetailsService(myUserDetails)
- ;
 
+
+
+                // session 并发登录   +++ session失效 跳转
+                .and()
+                .sessionManagement()
+                .invalidSessionUrl("/session/invalid")       // session失效时，要跳转
+                .maximumSessions(1)                            // 最大session数量
+                .expiredSessionStrategy(new ExpiredSessionStrategy())       // 详细记录谁把谁给踢掉
+                .and()
+                .and()
+
+
+
+//                 退出登录
+                .logout()
+                .logoutUrl("/signOut")
+//                .logoutSuccessUrl("/login") // 退出后定向到指定界面  todo 并没有跳转 到login   是不是退出后，session失效 便跳转到？？？  .invalidSessionUrl("/session/invalid")
+//                .logoutSuccessHandler() todo!!!!!!!!!!!!!!!!!!!
+                .deleteCookies("JSESSIONID")  // 删除cookie
+                .and()
+
+
+                .authorizeRequests()
+                .antMatchers("/login/**", SecurityConstants.DEFAULT_IMAGECODE_PROCESSING_URL,
+                        SecurityConstants.DEFAULT_SMSCODE_PROCESSING_URL,"/regist","/demoSignUp","/signUp","/session/invalid").permitAll()
+                .anyRequest()
+                .authenticated() ;
+
+                http.sessionManagement().maximumSessions(1).expiredUrl("/session/invalid");
 
               http .csrf().disable()
                       .apply(smsCodeAuthenticationSecurityConfig);
